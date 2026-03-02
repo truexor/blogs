@@ -1,0 +1,147 @@
+---
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import Meta from "../components/Meta.astro";
+import { getCollection } from "astro:content";
+import SEO from "../components/SEO.astro";
+import { META } from "../data/meta";
+import "../styles/globals.css";
+
+const title = META.HOME.TITLE;
+const desc = META.HOME.DESC;
+const thumbnail = META.HOME.THUMBNAIL;
+
+const posts = (await getCollection("blog"))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>{title}</title>
+    <meta name="description" content={desc} />
+
+    <SEO
+      title={title}
+      description={desc}
+      image={thumbnail}
+    />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+
+  <body>
+    <Header />
+    <main>
+      <section class="wrapper home">
+        <h1>Blogs</h1>
+
+        <div class="blog-list">
+          {
+            posts.map((post, i) => (
+              <a
+                href={`/${post.slug}`}
+                class={`${i & 1 ? "card-odd" : "card-even"} blog-card`}
+              >
+                <div class="thumbnail">
+                  <img src={post.data.cover} alt={post.data.title} />
+                </div>
+
+                <div class="detail">
+                  <h2>{post.data.title}</h2>
+                  <Meta
+                    pubDate={post.data.pubDate}
+                    readTimeMins={post.data.readTimeMins}
+                  />
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .home {
+    margin: 40px auto 64px;
+  }
+
+  .blog-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .detail h2 {
+    font-size: larger;
+    margin: 0;
+    line-height: 1.6rem;
+    line-clamp: 2;
+    padding-right: 16px;
+  }
+
+  .blog-card {
+    display: flex;
+    align-items: start;
+    width: 100%;
+    gap: 16px;
+    padding: 32px 0 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .blog-card:hover {
+    text-decoration: none;
+  }
+
+  .blog-card:hover .detail h2 {
+    color: var(--accent);
+  }
+
+  .card-odd {
+    padding-left: 32px;
+  }
+
+  .card-even {
+    border-right: 1px solid var(--border);
+    padding-right: 28px;
+  }
+
+  .thumbnail {
+    width: 56px;
+    height: 56px;
+    overflow: hidden;
+    border-radius: 999px;
+    flex-shrink: 0;
+  }
+
+  .thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (max-width: 768px) {
+    .blog-card {
+      padding: 24px 0 4px;
+    }
+
+    .card-odd {
+      padding-left: 0px;
+    }
+
+    .card-even {
+      padding-right: 0px;
+      border-right: none;
+    }
+
+    .blog-list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
