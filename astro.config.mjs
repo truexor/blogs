@@ -1,6 +1,5 @@
-import { defineConfig } from 'astro/config';
-import sitemap from '@astrojs/sitemap';
-import { CDN_DOMAIN, DOMAIN_URL } from './src/data/vars';
+import { defineConfig } from 'astro/config'
+import { CDN_DOMAIN, DOMAIN_URL } from './src/data/vars'
 
 export default defineConfig({
   output: "static",
@@ -9,5 +8,4 @@ export default defineConfig({
     domains: [CDN_DOMAIN]
   },
   site: DOMAIN_URL,
-  integrations: [sitemap()],
-});
+})
