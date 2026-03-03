@@ -8,6 +8,7 @@ import BlogMetrics from "../components/BlogMetrics.astro"
 import { calculateReadingTime } from "../utils/readTime"
 import Metadata from "../components/seo/Metadata.astro"
 import { RSS_URL } from "../data/vars"
+import HomeJsonLD from "../components/seo/HomeJsonLD.astro"
 
 const title = META.HOME.TITLE
 const desc = META.HOME.DESC
@@ -62,6 +63,7 @@ const posts = (await getCollection("blog"))
       </section>
     </main>
     <Footer />
+    <HomeJsonLD />
   </body>
 </html>
 
