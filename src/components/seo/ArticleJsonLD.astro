@@ -1,0 +1,96 @@
+---
+import { FULL_NAME, LOGO_URL, SOCIALS } from "../../data/_me"
+
+const { title, description, pubDate, updatedDate, thumbnail, tags, wordCount } = Astro.props
+
+const siteUrl = Astro.site
+const postUrl = Astro.url.href
+const organizationLogoUrl = LOGO_URL
+const thumbnailUrl = thumbnail ? [thumbnail] : undefined
+
+const authorLD = {
+  "@type": "Person",
+  name: FULL_NAME, 
+  url: SOCIALS.MAIN,
+  sameAs: [
+    SOCIALS.LINKEDIN,
+    SOCIALS.GITHUB,
+  ]
+}
+
+const publisherLD = {
+  "@type": "Organization",
+  name: FULL_NAME,
+  url: SOCIALS.MAIN,
+  logo: {
+    "@type": "ImageObject",
+    url: organizationLogoUrl,
+  },
+}
+
+
+const jsonLd = [
+  // BLOG POSTING --------------------------------
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "@id": postUrl + "#article",
+
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": postUrl,
+    },
+
+    headline: title,
+    description: description,
+    image: thumbnailUrl,
+
+    author: authorLD,
+
+    publisher: publisherLD,
+
+    datePublished: new Date(pubDate).toISOString(),
+    dateModified: new Date(updatedDate ?? pubDate).toISOString(),
+
+    articleSection: "Blog",
+    keywords: tags?.join(", "),
+    inLanguage: "en",
+    isAccessibleForFree: true,
+    wordCount
+  },
+
+  // BREADCRUMBS --------------------------------
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "@id": postUrl + "#breadcrumb",
+
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: siteUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: title,
+        item: postUrl,
+      },
+    ],
+  },
+]
+
+const structuredData = jsonLd.map(obj =>
+  Object.fromEntries(
+    Object.entries(obj).filter(([_, v]) => v !== undefined)
+  )
+)
+
+---
+
+<script 
+  type="application/ld+json" 
+  set:html={JSON.stringify(structuredData)} 
+/>

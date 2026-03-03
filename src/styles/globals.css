@@ -40,6 +40,10 @@ body {
   line-height: 1.6;
 }
 
+main {
+  min-height: 100vh;
+}
+
 /* FONT FAMILY ============= */
 pre, code {
   font-family: ui-monospace, SFMono-Regular, Consolas, monospace;

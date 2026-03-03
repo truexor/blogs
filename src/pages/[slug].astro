@@ -1,58 +1,57 @@
 ---
-import { getCollection } from "astro:content";
-import Meta from "../components/Meta.astro";
-import Footer from "../components/Footer.astro";
-import Header from "../components/Header.astro";
-import SEO from "../components/SEO.astro";
-import { META } from "../data/meta";
-import "../styles/globals.css";
-
+import { getCollection } from "astro:content"
+import Metadata from "../components/seo/Metadata.astro"
+import Footer from "../components/Footer.astro"
+import Header from "../components/Header.astro"
+import { META } from "../data/meta"
+import "../styles/globals.css"
+import BlogMetrics from "../components/BlogMetrics.astro"
+import ArticleJsonLD from "../components/seo/ArticleJsonLD.astro"
+import { calculateReadingTime } from "../utils/readTime"
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog");
+  const posts = await getCollection("blog")
 
   return posts.map((post) => ({
     params: { slug: post.slug },
     props: { post },
-  }));
+  }))
 }
 
-const { post } = Astro.props;
-const { Content } = await post.render();
+const { post } = Astro.props
+const { Content } = await post.render()
 
-const title = post.data.title + " | " + META.HOME.TITLE
+const seoJsonLdTitle = post.data.seoTitle ?? post.data.title
+const seoMetaTitle = seoJsonLdTitle + " | " + META.HOME.TITLE
+const seoDesc = post.data.seoDescription ?? post.data.description
+
+const readMinutes = calculateReadingTime(post.data.wordCount)
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <title>{title}</title>
-    <meta name="description" content={post.data.description} />
-
-    <SEO
-      title={title}
-      description={post.data.description}
+    <Metadata
+      title={seoMetaTitle}
+      description={seoDesc}
       image={post.data.cover || ""}
       publishDate={post.data.pubDate}
+      modDate={post.data.updatedDate}
+      thumbnail={post.data.cover}
     />
-
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
 
   <body>
     <Header />
-
     <main>
       <article class="wrapper">
         <div class="content">
           <div>
             <h1>{post.data.title}</h1>
-            <Meta
+            <BlogMetrics
               pubDate={post.data.pubDate}
-              readTimeMins={post.data.readTimeMins}
+              readTimeMins={readMinutes}
             />
           </div>
           {
@@ -72,8 +71,16 @@ const title = post.data.title + " | " + META.HOME.TITLE
         </div>
       </article>
     </main>
-
     <Footer />
+    <ArticleJsonLD
+      title={seoJsonLdTitle}
+      description={seoDesc}
+      pubDate={post.data.pubDate}
+      updatedDate={post.data.updatedDate}
+      thumbnail={post.data.cover}
+      tags={post.data.keywords}
+      wordCount={post.data.wordCount}
+    />
   </body>
 </html>
 

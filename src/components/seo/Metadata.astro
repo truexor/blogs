@@ -1,0 +1,63 @@
+---
+import { NAME } from '../../data/_me'
+import { META } from '../../data/meta'
+
+interface Props {
+  title: string
+  description: string
+  image: string
+  publishDate?: Date
+  modDate?: Date
+  thumbnail?: string
+}
+
+const { title, description, image, publishDate, modDate, thumbnail } = Astro.props as Props
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site)
+const ogImage = new URL(image, Astro.site)
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalURL} />
+<meta name="author" content={NAME}>
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="index, follow">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content={META.HOME.TITLE}>
+<meta property="og:type" content={(publishDate || modDate) ? "article" : "website"} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:image" content={ogImage} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+{
+  (publishDate || modDate) && (
+    <meta property="article:author" content={NAME} />
+  )
+}
+{
+  publishDate && (
+    <meta property="article:published_time" content={publishDate.toISOString()}/>
+  )
+}
+{
+  modDate && (
+    <meta property="article:modified_time" content={modDate.toISOString()} />
+  )
+}
+{
+  thumbnail && (
+    <link rel="preload" as="image" href={thumbnail} />
+  )
+}
+

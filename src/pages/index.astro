@@ -1,37 +1,34 @@
 ---
-import Footer from "../components/Footer.astro";
-import Header from "../components/Header.astro";
-import Meta from "../components/Meta.astro";
-import { getCollection } from "astro:content";
-import SEO from "../components/SEO.astro";
-import { META } from "../data/meta";
-import "../styles/globals.css";
+import Footer from "../components/Footer.astro"
+import Header from "../components/Header.astro"
+import { getCollection } from "astro:content"
+import { META } from "../data/meta"
+import "../styles/globals.css"
+import BlogMetrics from "../components/BlogMetrics.astro"
+import { calculateReadingTime } from "../utils/readTime"
+import Metadata from "../components/seo/Metadata.astro"
+import { RSS_URL } from "../data/vars"
 
-const title = META.HOME.TITLE;
-const desc = META.HOME.DESC;
-const thumbnail = META.HOME.THUMBNAIL;
+const title = META.HOME.TITLE
+const desc = META.HOME.DESC
+const thumbnail = META.HOME.THUMBNAIL
 
 const posts = (await getCollection("blog"))
   .filter((post) => !post.data.draft)
-  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .map((obj) => ({ ...obj, readTimeMins: calculateReadingTime(obj.data.wordCount) }))
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <title>{title}</title>
-    <meta name="description" content={desc} />
-
-    <SEO
+    <Metadata
       title={title}
       description={desc}
       image={thumbnail}
     />
-
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" type="application/rss+xml" title={`${META.HOME.TITLE} RSS Feed`} href={RSS_URL}>
   </head>
 
   <body>
@@ -53,9 +50,9 @@ const posts = (await getCollection("blog"))
 
                 <div class="detail">
                   <h2>{post.data.title}</h2>
-                  <Meta
+                  <BlogMetrics
                     pubDate={post.data.pubDate}
-                    readTimeMins={post.data.readTimeMins}
+                    readTimeMins={post.readTimeMins}
                   />
                 </div>
               </a>

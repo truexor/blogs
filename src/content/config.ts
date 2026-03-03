@@ -1,15 +1,21 @@
-import { defineCollection, z } from "astro:content";
+import { defineCollection, z } from "astro:content"
 
-// individual blog pages
 const blog = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
-    pubDate: z.date(),
-    readTimeMins: z.number(),
-    draft: z.boolean(),
     cover: z.string().optional(),
-  })
-});
+    
+    pubDate: z.date(),
+    updatedDate: z.date().optional(),
+    
+    wordCount: z.number(),
+    draft: z.boolean().optional(),
 
-export const collections = { blog };
+    seoTitle: z.string(),
+    seoDescription: z.string(),
+    keywords: z.array(z.string()),
+  })
+})
+
+export const collections = { blog }

@@ -1,0 +1,101 @@
+---
+import { FULL_NAME, LOGO_URL, SOCIALS } from "../../data/_me"
+
+const homeUrl = Astro.site
+const organizationLogoUrl = LOGO_URL
+
+const organizationLD = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": homeUrl + "#organization",
+
+  name: FULL_NAME,
+  url: SOCIALS.MAIN,
+
+  logo: organizationLogoUrl
+    ? {
+        "@type": "ImageObject",
+        url: organizationLogoUrl,
+      }
+    : undefined,
+
+  sameAs: [SOCIALS.LINKEDIN, SOCIALS.GITHUB],
+}
+
+const websiteLD = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": homeUrl + "#website",
+
+  url: homeUrl,
+  name: FULL_NAME,
+  description: "Personal tech blog and articles by " + FULL_NAME,
+  publisher: {
+    "@id": homeUrl + "#organization",
+  },
+
+  inLanguage: "en",
+}
+
+const webpageLD = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": homeUrl + "#webpage",
+
+  url: homeUrl,
+  name: FULL_NAME,
+  description: "Homepage of " + FULL_NAME + "'s blog",
+
+  isPartOf: {
+    "@id": homeUrl + "#website",
+  },
+
+  about: {
+    "@id": homeUrl + "#organization",
+  },
+
+  inLanguage: "en",
+}
+
+const blogLD = {
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "@id": homeUrl + "#blog",
+
+  url: homeUrl,
+  name: FULL_NAME + " Blog",
+
+  publisher: {
+    "@id": homeUrl + "#organization",
+  },
+
+  inLanguage: "en",
+}
+
+const breadcrumbLD = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "@id": homeUrl + "#breadcrumb",
+
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Home",
+      item: homeUrl,
+    },
+  ],
+}
+
+const jsonLd = [organizationLD, websiteLD, webpageLD, blogLD, breadcrumbLD]
+
+const structuredData = jsonLd.map((obj) =>
+  Object.fromEntries(Object.entries(obj).filter(([_, v]) => v !== undefined)),
+)
+
+---
+
+<script 
+  type="application/ld+json" 
+  set:html={JSON.stringify(structuredData)} 
+/>

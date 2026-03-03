@@ -1,11 +1,11 @@
 ---
-const { pubDate, readTimeMins } = Astro.props;
+const { pubDate, readTimeMins } = Astro.props
 
 const dateString = pubDate.toLocaleDateString("en-IN", {
   year: "numeric",
   month: "short",
   day: "numeric",
-});
+})
 ---
 
 <div class="meta">

@@ -1,18 +1,19 @@
 ---
-import { SOCIALS } from "../data/links";
-import { FOOTER_TITLE } from "../data/vars";
+import { SOCIALS } from "../data/_me"
+import { FOOTER_TITLE } from "../data/vars"
 
-const name = FOOTER_TITLE;
-const year = new Date().getFullYear();
+const name = FOOTER_TITLE
+const year = new Date().getFullYear()
 ---
 
 <footer>
   <section class="wrapper">
     <div class="footer-links">
-      <a target="_blank" rel="noopener noreferrer" aria-label="Main" title="Main" href={SOCIALS.MAIN}>Main</a>
-      <a target="_blank" rel="noopener noreferrer" aria-label="GitHub" title="GitHub" href={SOCIALS.GITHUB}>GitHub</a>
-      <a target="_blank" rel="noopener noreferrer" aria-label="Discord" title="Discord" href={SOCIALS.DISCORD}>Discord</a>
-      <a href={"/sitemap-index.xml"}>Sitemap</a>
+      <a target="_blank" aria-label="Main" title="Main" href={SOCIALS.MAIN}>Main</a>
+      <a target="_blank" aria-label="GitHub" title="GitHub" href={SOCIALS.GITHUB}>GitHub</a>
+      <a target="_blank" aria-label="Discord" title="Discord" href={SOCIALS.DISCORD}>Discord</a>
+      <a aria-label="Sitemap" href={"/sitemap-index.xml"}>Sitemap</a>
+      <a aria-label="RSS Feed" href={"/rss.xml"}>RSS</a>
     </div>
     <p id="copyright">&copy; {year} {name} • Blogs</p>
   </section>
