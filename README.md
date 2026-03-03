@@ -1,43 +1,27 @@
-# Astro Starter Kit: Minimal
+# Blogs
 
-```sh
-npm create astro@latest -- --template minimal
-```
+A simple blog website for publishing tech or thought articles.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Visit: https://blog.itskushal.com
 
-## 🚀 Project Structure
+Main: https://itskushal.com
 
-Inside of your Astro project, you'll see the following folders and files:
+---
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+### Add blog article:
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- Write markdown files inside `/src/content/blog/`
+- Add required fields (check `/src/content/config.ts`) to `.md` header
+  ### Example:
+  ```astro
+  ---
+  title: "Designing a Production Grade Distributed System on AWS"
+  description: "Designing a production-grade distributed system on Amazon Web Services (AWS) requires deliberate architectural decisions around scalability, fault tolerance, observability, security and cost optimization."
+  pubDate: 2025-11-17
+  readTimeMins: 15
+  draft: false
+  cover: "/thumbnails/aws-prod.webp"
+  slug: designing-a-production-grade-distributed-system-on-aws
+  ---
+  ```
+- Auto blog article generation thereafter
